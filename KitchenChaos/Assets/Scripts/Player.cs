@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
@@ -38,9 +40,15 @@ public class Player : MonoBehaviour
         inputVector = inputVector.normalized;
 
         Vector3 movDir = new Vector3(inputVector.x, 0, inputVector.y);
+        
+        //All about positions
         transform.position += movDir * Time.deltaTime * movSpeed;
 
-        Debug.Log(inputVector);
+        //All about rotations
+        transform.forward = Vector3.Slerp(transform.forward, movDir, Time.deltaTime * movSpeed);
+       
+
+        //Debug.Log(inputVector);
     }
 
     
