@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float movSpeed = 7f;
+
+    bool isWalking = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +44,8 @@ public class Player : MonoBehaviour
 
         Vector3 movDir = new Vector3(inputVector.x, 0, inputVector.y);
         
+        isWalking = movDir != Vector3.zero;
+
         //All about positions
         transform.position += movDir * Time.deltaTime * movSpeed;
 
@@ -51,5 +56,10 @@ public class Player : MonoBehaviour
         //Debug.Log(inputVector);
     }
 
-    
+    public bool IsWalking()
+    { 
+    return isWalking; 
+    }
 }
+
+    
