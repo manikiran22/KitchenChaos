@@ -10,7 +10,8 @@ public class PlayerAnim : MonoBehaviour
 
     private const string IS_WALKING = "IsWalking";
 
-    [SerializeField] private Player player;
+   // [SerializeField] private Player player;
+    [SerializeField] private PIS_F  pis;
     
     void Awake()
     {
@@ -20,6 +21,6 @@ public class PlayerAnim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool(IS_WALKING, player.IsWalking());
+        animator.SetBool(IS_WALKING, pis.IsWalking());
     }
 }
