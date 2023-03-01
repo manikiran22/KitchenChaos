@@ -21,7 +21,20 @@ public class PIS_F : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        HandleMovement();
+        HandleInteraction();
+    }
+
+    //All the Walking Animation
+    public bool IsWalking()
+    {
+        return isWalking;
+    }
+
+    //All the movement - rotation - collision 
+    private void HandleMovement()
+    {
+
         Vector2 inputVector = playerInpSys.InputVecNor();
         Vector3 movDir = new Vector3(inputVector.x, 0, inputVector.y);
 
@@ -31,7 +44,7 @@ public class PIS_F : MonoBehaviour
 
         //physics is the class and Raycast is the function that checks if has object in the way
         //Capsulecast is for better reach of the body 
-        bool canMove = !Physics.CapsuleCast(transform.position,transform.position + Vector3.up * playerHead,playerRadius, movDir, movDist);
+        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHead, playerRadius, movDir, movDist);
         //Physics.Raycast()
 
         //so when the player is against the wall and cant move forward but is in the diagonal position 
@@ -42,7 +55,7 @@ public class PIS_F : MonoBehaviour
             //basically cannot move towards the moveDirection or the object
 
             //Attempt to move towards X (if W->D)
-            Vector3 movDirX = new Vector3(movDir.x,0,0);
+            Vector3 movDirX = new Vector3(movDir.x, 0, 0);
             canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHead, playerRadius, movDirX, movDist);
 
             if (canMove)
@@ -50,15 +63,16 @@ public class PIS_F : MonoBehaviour
                 //can move only in movDirX
                 movDir = movDirX;
             }
-            else { 
+            else
+            {
                 //can move only on X
                 //Attempt to move z
-                Vector3 movDirZ = new Vector3(0,0,movDir.z);
+                Vector3 movDirZ = new Vector3(0, 0, movDir.z);
                 canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHead, playerRadius, movDirZ, movDist);
 
-                if(canMove)
+                if (canMove)
                 {
-                    movDir= movDirZ;
+                    movDir = movDirZ;
                 }
             }
         }
@@ -78,8 +92,19 @@ public class PIS_F : MonoBehaviour
         //Debug.Log(inputVector);
     }
 
-    public bool IsWalking()
+    //All the Interaction
+    private void HandleInteraction()
     {
-        return isWalking;
+        Vector2 inputVec = playerInpSys.InputVecNor();
+        Vector3 movDir = new Vector3(inputVec.x, 0, inputVec.y);
+        float interactDist = 2f;
+        if (Physics.Raycast(transform.position, movDir, out RaycastHit raycastHit, interactDist))
+        {
+            Debug.Log(raycastHit.transform);
+        }
+        else {
+            Debug.Log("_");
+                }
+
     }
 }
