@@ -8,9 +8,11 @@ public class PIS_F : MonoBehaviour
     private float movSpeed = 7f;
     [SerializeField]
     private PlayerInpSys playerInpSys;
-
+    [SerializeField]
+    private LayerMask clearCountMask;
 
     bool isWalking = false;
+    Vector3 lastDir;
 
     // Start is called before the first frame update
     void Start()
@@ -97,14 +99,25 @@ public class PIS_F : MonoBehaviour
     {
         Vector2 inputVec = playerInpSys.InputVecNor();
         Vector3 movDir = new Vector3(inputVec.x, 0, inputVec.y);
+
+        if (movDir != Vector3.zero)
+        { 
+            lastDir= movDir;
+        }
+
         float interactDist = 2f;
-        if (Physics.Raycast(transform.position, movDir, out RaycastHit raycastHit, interactDist))
+        if (Physics.Raycast(transform.position, lastDir, out RaycastHit raycastHit, interactDist, clearCountMask))
         {
-            Debug.Log(raycastHit.transform);
+            //Debug.Log("Interacted");
+            //Debug.Log(raycastHit.transform);
+            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))
+            {
+                clearCount.Interact();
+            }
         }
         else {
             Debug.Log("_");
-                }
+             }
 
     }
 }
