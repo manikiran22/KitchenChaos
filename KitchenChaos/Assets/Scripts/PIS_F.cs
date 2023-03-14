@@ -15,9 +15,37 @@ public class PIS_F : MonoBehaviour
     Vector3 lastDir;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        playerInpSys.OnInteractAction += PlayerInpSys_OnInteractAction;
+    }
 
+    private void PlayerInpSys_OnInteractAction(object sender, System.EventArgs e)
+    {
+        
+            Vector2 inputVec = playerInpSys.InputVecNor();
+            Vector3 movDir = new Vector3(inputVec.x, 0, inputVec.y);
+
+            if (movDir != Vector3.zero)
+            {
+                lastDir = movDir;
+            }
+
+            float interactDist = 2f;
+        if (Physics.Raycast(transform.position, lastDir, out RaycastHit raycastHit, interactDist, clearCountMask))
+        {
+            //Debug.Log("Interacted");
+            //Debug.Log(raycastHit.transform);
+            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))
+            {
+                clearCount.Interact();
+            }
+        }
+        else {
+            Debug.Log("-");
+                }
+
+        
     }
 
     // Update is called once per frame
@@ -112,12 +140,9 @@ public class PIS_F : MonoBehaviour
             //Debug.Log(raycastHit.transform);
             if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))
             {
-                clearCount.Interact();
+                //clearCount.Interact();
             }
         }
-        else {
-            Debug.Log("_");
-             }
 
     }
 }
