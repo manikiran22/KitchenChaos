@@ -11,6 +11,8 @@ public class PIS_F : MonoBehaviour
     [SerializeField]
     private LayerMask clearCountMask;
 
+    private ClearCount selectedClrCnt;
+
     bool isWalking = false;
     Vector3 lastDir;
 
@@ -22,28 +24,11 @@ public class PIS_F : MonoBehaviour
 
     private void PlayerInpSys_OnInteractAction(object sender, System.EventArgs e)
     {
-        
-            Vector2 inputVec = playerInpSys.InputVecNor();
-            Vector3 movDir = new Vector3(inputVec.x, 0, inputVec.y);
 
-            if (movDir != Vector3.zero)
-            {
-                lastDir = movDir;
-            }
-
-            float interactDist = 2f;
-        if (Physics.Raycast(transform.position, lastDir, out RaycastHit raycastHit, interactDist, clearCountMask))
+        if (selectedClrCnt != null)
         {
-            //Debug.Log("Interacted");
-            //Debug.Log(raycastHit.transform);
-            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))
-            {
-                clearCount.Interact();
-            }
+            selectedClrCnt.Interact();
         }
-        else {
-            Debug.Log("-");
-                }
 
         
     }
@@ -138,10 +123,20 @@ public class PIS_F : MonoBehaviour
         {
             //Debug.Log("Interacted");
             //Debug.Log(raycastHit.transform);
-            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))
+            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount)) //this is saying if the object that was hit by a raycast 
             {
-                //clearCount.Interact();
+                if (clearCount != selectedClrCnt)
+                {
+                    selectedClrCnt = clearCount;
+                }
             }
+            else {
+                selectedClrCnt = null;
+            }
+        }
+        else {
+            selectedClrCnt = null;
+            Debug.Log(null);
         }
 
     }

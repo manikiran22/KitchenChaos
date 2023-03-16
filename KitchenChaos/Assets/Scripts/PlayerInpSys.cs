@@ -19,7 +19,7 @@ public class PlayerInpSys : MonoBehaviour
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (OnInteractAction != null)
+        if (OnInteractAction != null) //checking if there are subscribers
         {
             OnInteractAction(this, EventArgs.Empty);
         }
