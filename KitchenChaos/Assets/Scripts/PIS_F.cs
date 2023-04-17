@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,11 @@ public class PIS_F : MonoBehaviour
     private LayerMask clearCountMask;
 
     private ClearCount selectedClrCnt;
+
+    public event EventHandler OnSelectedCounterChanged;
+    
+    //eventargs are the extension of the event when we want to pass in more info to it
+
 
     bool isWalking = false;
     Vector3 lastDir;
@@ -28,9 +34,9 @@ public class PIS_F : MonoBehaviour
         if (selectedClrCnt != null)
         {
             selectedClrCnt.Interact();
+            OnSelectedCounterChanged?.Invoke(this,EventArgs.Empty);
         }
-
-        
+    
     }
 
     // Update is called once per frame
@@ -123,17 +129,18 @@ public class PIS_F : MonoBehaviour
         {
             //Debug.Log("Interacted");
             //Debug.Log(raycastHit.transform);
-            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount)) //this is saying if the object that was hit by a raycast 
+            //this is saying if the object that was hit by a raycast
+            if (raycastHit.transform.TryGetComponent(out ClearCount clearCount))  
             {
                 if (clearCount != selectedClrCnt)
                 {
                     selectedClrCnt = clearCount;
                 }
-            }
+            }//if there is something but that is not a clearcounter then mark it to null
             else {
                 selectedClrCnt = null;
             }
-        }
+        }//if there is nothing infront of the player then 
         else {
             selectedClrCnt = null;
             Debug.Log(null);
